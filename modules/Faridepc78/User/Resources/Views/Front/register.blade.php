@@ -51,10 +51,11 @@
             </span>
             @enderror
 
+
+
             <br>
             <button class="btn continue-btn">ثبت نام و ادامه</button>
         </form>
-
         <div class="form-footer">
             <a href="{{ route('login') }}">صفحه ورود</a>
         </div>

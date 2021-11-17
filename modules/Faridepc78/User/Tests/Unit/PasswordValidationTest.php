@@ -7,6 +7,11 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordValidationTest extends TestCase
 {
+    /**
+     * A basic unit test example.
+     *
+     * @return void
+     */
     public function test_password_should_not_be_less_than_6_character()
     {
         $result = (new ValidPassword())->passes('', 'A12a!');
@@ -36,4 +41,5 @@ class PasswordValidationTest extends TestCase
         $result = (new ValidPassword())->passes('', '!@!@ASDFWESD');
         $this->assertEquals(0, $result);
     }
+
 }

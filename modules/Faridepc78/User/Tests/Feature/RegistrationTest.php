@@ -2,16 +2,15 @@
 
 namespace Faridepc78\User\Tests\Feature;
 
-use Carbon\Laravel\ServiceProvider;
 use Faridepc78\User\Models\User;
 use Faridepc78\User\Services\VerifyCodeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -58,7 +57,7 @@ class RegistrationTest extends TestCase
             ]
         );
         $code = VerifyCodeService::generate();
-        VerifyCodeService::store($user->id, $code);
+        VerifyCodeService::store($user->id, $code, now()->addDay());
 
         auth()->loginUsingId($user->id);
 

@@ -161,7 +161,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        \Faridepc78\User\Providers\UserServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -176,6 +175,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        \Faridepc78\User\Providers\UserServiceProvider::class,
+        \Faridepc78\Dashboard\Providers\DashboardServiceProvider::class,
+        \Faridepc78\Category\Providers\CategoryServiceProvider::class,
+        \Faridepc78\RolePermissions\Providers\RolePermissionsServiceProvider::class,
     ],
 
     /*

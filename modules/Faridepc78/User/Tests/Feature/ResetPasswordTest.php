@@ -36,5 +36,4 @@ class ResetPasswordTest extends TestCase
         }
         $this->post(route('password.checkVerifyCode'), ['verify_code', 'email' => 'hemn@gmail.com'])->assertStatus(429);
     }
-
 }

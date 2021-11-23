@@ -27,7 +27,6 @@ Route::group([
         ->name('password.showResetForm')->middleware('auth');
     Route::post('/password/change', 'Auth\ResetPasswordController@reset')->name('password.update');
 
-
     // register
     Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
     Route::post('/register', 'Auth\RegisterController@register')->name('register');

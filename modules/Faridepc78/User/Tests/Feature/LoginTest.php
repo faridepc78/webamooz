@@ -11,7 +11,11 @@ class LoginTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
-
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
     public function test_user_can_login_by_email()
     {
         $user = User::create(

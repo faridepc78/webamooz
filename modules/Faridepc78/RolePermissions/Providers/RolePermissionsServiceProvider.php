@@ -2,6 +2,11 @@
 
 namespace Faridepc78\RolePermissions\Providers;
 
+use Faridepc78\RolePermissions\Database\Seeds\RolePermissionTableSeeder;
+use Faridepc78\RolePermissions\Models\Permission;
+use Faridepc78\RolePermissions\Models\Role;
+use Faridepc78\RolePermissions\Policies\RolePermissionPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class RolePermissionsServiceProvider extends ServiceProvider
@@ -12,6 +17,11 @@ class RolePermissionsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
         $this->loadViewsFrom(__DIR__ . '/../Resources/Views/', 'RolePermissions');
         $this->loadJsonTranslationsFrom(__DIR__ . "/../Resources/Lang");
+        \DatabaseSeeder::$seeders[] = RolePermissionTableSeeder::class;
+        Gate::policy(Role::class, RolePermissionPolicy::class);
+        Gate::before(function ($user) {
+            return $user->hasPermissionTo(Permission::PERMISSION_SUPER_ADMIN) ? true : null;
+        });
     }
 
     public function boot()

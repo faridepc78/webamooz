@@ -21,6 +21,7 @@ class VerifyCodeServiceTest extends TestCase
     {
         $code = VerifyCodeService::generate();
         VerifyCodeService::store(1, $code, 120);
+
         $this->assertEquals($code, cache()->get('verify_code_1'));
     }
 }

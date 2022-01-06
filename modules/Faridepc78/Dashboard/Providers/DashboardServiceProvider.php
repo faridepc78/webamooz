@@ -2,7 +2,7 @@
 
 namespace Faridepc78\Dashboard\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use \Illuminate\Support\ServiceProvider;
 
 class DashboardServiceProvider extends ServiceProvider
 {

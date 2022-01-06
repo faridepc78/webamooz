@@ -5,24 +5,39 @@ namespace Faridepc78\User\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Faridepc78\User\Http\Requests\ResetPasswordVerifyCodeRequest;
 use Faridepc78\User\Http\Requests\SendResetPasswordVerifyCodeRequest;
+use Faridepc78\User\Http\Requests\VerifyCodeRequest;
+use Faridepc78\User\Models\User;
 use Faridepc78\User\Repositories\UserRepo;
 use Faridepc78\User\Services\VerifyCodeService;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Http\Request;
 
 class ForgotPasswordController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Password Reset Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling password reset emails and
+    | includes a trait which assists in sending these notifications from
+    | your application to your users. Feel free to explore this trait.
+    |
+    */
+
     use SendsPasswordResetEmails;
+
 
     public function showVerifyCodeRequestForm()
     {
         return view('User::Front.passwords.email');
     }
 
-    public function sendVerifyCodeEmail(SendResetPasswordVerifyCodeRequest $request)
+    public function sendVerifyCodeEmail(SendResetPasswordVerifyCodeRequest $request, UserRepo $userRepo)
     {
-        $user = resolve(UserRepo::class)->findByEmail($request->email);
+        $user = $userRepo->findByEmail($request->email);
 
-        if ($user && !VerifyCodeService::has($user->id)) {
+        if ($user && ! VerifyCodeService::has($user->id)) {
             $user->sendResetPasswordRequestNotification();
         }
 
@@ -40,5 +55,6 @@ class ForgotPasswordController extends Controller
         auth()->loginUsingId($user->id);
 
         return redirect()->route('password.showResetForm');
+
     }
 }

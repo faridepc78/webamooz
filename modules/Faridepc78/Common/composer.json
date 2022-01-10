@@ -1,5 +1,5 @@
 {
-    "name": "faridepc78/common",
+    "name": "Faridepc78/common",
     "autoload": {
         "psr-4": {
             "Faridepc78\\Common\\" : "src"

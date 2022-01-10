@@ -3,11 +3,14 @@
 namespace Faridepc78\User\Models;
 
 use Faridepc78\Course\Models\Course;
+use Faridepc78\Course\Models\Lesson;
+use Faridepc78\Course\Models\Season;
 use Faridepc78\Media\Models\Media;
 use Faridepc78\RolePermissions\Models\Role;
 use Faridepc78\User\Notifications\ResetPasswordRequestNotification;
 use Faridepc78\User\Notifications\VerifyMailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -16,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
     use HasRoles;
+    use HasFactory;
 
     const STATUS_ACTIVE = "active";
     const STATUS_INACTIVE = "inactive";
@@ -82,8 +86,26 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Course::class, 'teacher_id');
     }
 
+    public function seasons()
+    {
+        return $this->hasMany(Season::class);
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
     public function profilePath()
     {
         return $this->username ? route('viewProfile', $this->username) : route('viewProfile', 'username');
+    }
+
+    public function getThumbAttribute()
+    {
+        if ($this->image)
+            return '/storage/' . $this->image->files[300];
+
+        return '/panel/img/profile.jpg';
     }
 }

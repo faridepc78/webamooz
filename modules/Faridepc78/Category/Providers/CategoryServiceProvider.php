@@ -3,6 +3,7 @@ namespace Faridepc78\Category\Providers;
 
 use Faridepc78\Category\Models\Category;
 use Faridepc78\Category\Policies\CategoryPolicy;
+use Faridepc78\RolePermissions\Models\Permission;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,7 +22,8 @@ class CategoryServiceProvider extends ServiceProvider
         config()->set('sidebar.items.categories', [
             "icon" => "i-categories",
             "title" => "دسته بندی ها",
-            "url" => route('categories.index')
+            "url" => route('categories.index'),
+            "permission" => Permission::PERMISSION_MANAGE_CATEGORIES
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace Faridepc78\User\Tests\Feature;
 
 use Carbon\Laravel\ServiceProvider;
+use Faridepc78\RolePermissions\Database\Seeds\RolePermissionTableSeeder;
 use Faridepc78\User\Models\User;
 use Faridepc78\User\Services\VerifyCodeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -74,6 +75,7 @@ class RegistrationTest extends TestCase
 
     public function test_verified_user_can_see_home_page()
     {
+        $this->seed(RolePermissionTableSeeder::class);
         $this->registerNewUser();
 
         $this->assertAuthenticated();

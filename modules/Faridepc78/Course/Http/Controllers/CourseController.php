@@ -6,16 +6,23 @@ use Faridepc78\Category\Repositories\CategoryRepo;
 use Faridepc78\Common\Responses\AjaxResponses;
 use Faridepc78\Course\Http\Requests\CourseRequest;
 use Faridepc78\Course\Models\Course;
+use Faridepc78\Course\Models\Lesson;
 use Faridepc78\Course\Repositories\CourseRepo;
+use Faridepc78\Course\Repositories\LessonRepo;
 use Faridepc78\Media\Services\MediaFileService;
+use Faridepc78\RolePermissions\Models\Permission;
 use Faridepc78\User\Repositories\UserRepo;
 
 class CourseController extends Controller
 {
     public function index(CourseRepo $courseRepo)
     {
-        $this->authorize('manage', Course::class);
-        $courses = $courseRepo->paginate();
+        $this->authorize('index', Course::class);
+        if (auth()->user()->hasAnyPermission([Permission::PERMISSION_MANAGE_COURSES, Permission::PERMISSION_SUPER_ADMIN])) {
+            $courses = $courseRepo->paginate();
+        }else{
+            $courses = $courseRepo->getCoursesByTeacherId(auth()->id());
+        }
         return view('Courses::index', compact('courses'));
     }
 
@@ -29,7 +36,7 @@ class CourseController extends Controller
 
     public function store(CourseRequest $request, CourseRepo $courseRepo)
     {
-        $request->request->add(['banner_id' => MediaFileService::upload($request->file('image'))->id ]);
+        $request->request->add(['banner_id' => MediaFileService::publicUpload($request->file('image'))->id ]);
         $courseRepo->store($request);
         return redirect()->route('courses.index');
     }
@@ -48,7 +55,7 @@ class CourseController extends Controller
         $course = $courseRepo->findByid($id);
         $this->authorize('edit', $course);
         if ($request->hasFile('image')) {
-            $request->request->add(['banner_id' => MediaFileService::upload($request->file('image'))->id ]);
+            $request->request->add(['banner_id' => MediaFileService::publicUpload($request->file('image'))->id ]);
             if ($course->banner)
                 $course->banner->delete();
         }else{
@@ -58,6 +65,14 @@ class CourseController extends Controller
         return redirect(route('courses.index'));
     }
 
+    public function details($id, CourseRepo $courseRepo, LessonRepo $lessonRepo)
+    {
+        $course = $courseRepo->findByid($id);
+        $lessons = $lessonRepo->paginate($id);
+        $this->authorize('details', $course);
+        return view('Courses::details', compact('course', 'lessons'));
+    }
+
     public function destroy($id, CourseRepo $courseRepo)
     {
         $course =  $courseRepo->findByid($id);
@@ -65,9 +80,7 @@ class CourseController extends Controller
         if ($course->banner) {
             $course->banner->delete();
         }
-
         $course->delete();
-
         return AjaxResponses::SuccessResponse();
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace Faridepc78\Category\Http\Controllers;
 
 use App\Http\Controllers\Controller;
